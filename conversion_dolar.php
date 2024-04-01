@@ -7,42 +7,22 @@
  * Version: 0.0.5
  */
 
-// URL para obtener el tipo de cambio
-$url = "https://wise.com/es/currency-converter/usd-to-gtq-rate";
+require_once(dirname(__FILE__) . '/includes/api.php' );
 
-// Opciones para la solicitud cURL
-$options = array(
-    CURLOPT_URL => $url,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_USERAGENT => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.95 Safari/537.36",
-);
 
-// Función para obtener el tipo de conversión de dólar
 function get_tipo_conversion_dolar() {
-    global $options;
+    $tipo_texto = get_conversion_Dolar();
+    // 19x px de largo
+    //de ancho  1px
+    echo '
+    <div style="margin: 8px 0 0; padding: 20px; text-align: center;">
+    <div style="align-items: center; justify-content: space-between; padding: 7px; width: 200px; background-color: #ffffff;">
+        <h2 style="font-size: 16px; margin: 0; font-family: Montserrat, sans-serif; color: #052a60; margin-top:5px">Conversión USD a GTQ</h2>
+        <span style="font-weight: bold; color: #052a60;">' . $tipo_texto . '</span>
+    </div>
+</div>
 
-    // Inicia una solicitud cURL
-    $ch = curl_init();
-    curl_setopt_array($ch, $options);
-
-    // Realiza la solicitud
-    $response = curl_exec($ch);
-    curl_close($ch);
-
-    // Analiza el HTML para obtener el tipo de cambio
-    $dom = new DOMDocument();
-    @$dom->loadHTML($response); // La '@' suprime los errores de HTML si el documento no está bien formado
-
-    // Busca el elemento que contiene el tipo de cambio
-    $title = $dom->getElementsByTagName('span')->item(24);
-    $titleText = $title->textContent;
-
-    // Formatea la salida
-    $output = "Conversion de USD a GTQ:<br>";
-    $output .= $titleText . "<br>";
-
-    return $output;
+    ';
 }
 
 // Registra el shortcode para mostrar el tipo de conversión de dólar
