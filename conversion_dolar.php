@@ -17,10 +17,10 @@ function get_tipo_conversion_dolar() {
     echo '
     <div style="margin: 8px 0 0; padding: 20px; text-align: center; ">
     <div style="align-items: center; justify-content: space-between; padding: 7px; width: 115px; background-color: #ffffff;border-radius: 25px;">
-        <h2 style="font-size: 8px; margin: 0; font-family: Montserrat, sans-serif; color: #052a60">Conversión USD a GTQ</h2>
-        <span style="font-weight: bold; color: #052a60;font-size: 7px;">' . $tipo_texto . '</span>
+      <h2 style="font-size: 8px; margin: 0; font-family: Montserrat, sans-serif; color: #052a60">Conversión USD a GTQ<span style="font-weight: bold; color: #052a60;font-size: 7px;">' . $tipo_texto . '</span></h2>
     </div>
-</div>
+  </div>
+  
 
     ';
 }
