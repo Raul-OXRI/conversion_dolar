@@ -16,9 +16,9 @@ function get_tipo_conversion_dolar() {
     //de ancho  1px
     echo '
     <div style="margin: 8px 0 0; padding: 20px; text-align: center;">
-    <div style="align-items: center; justify-content: space-between; padding: 7px; width: 200px; background-color: #ffffff;">
-        <h2 style="font-size: 16px; margin: 0; font-family: Montserrat, sans-serif; color: #052a60; margin-top:5px">Conversión USD a GTQ</h2>
-        <span style="font-weight: bold; color: #052a60;">' . $tipo_texto . '</span>
+    <div style="align-items: center; justify-content: space-between; padding: 7px; width: 105px; background-color: #ffffff;">
+        <h2 style="font-size: 8px; margin: 0; font-family: Montserrat, sans-serif; color: #052a60; margin-top:5px">Conversión USD a GTQ</h2>
+        <span style="font-weight: bold; color: #052a60;font-size: 7px">' . $tipo_texto . '</span>
     </div>
 </div>
 
