@@ -1,7 +1,7 @@
 <?php
 
 // URL para obtener el tipo de cambio
-$url = "https://themoneyconverter.com/ES/USD/GTQ";
+$url = "https://www.exchange-rates.org/es/conversor/usd-gtq";
 
 // Opciones para la solicitud cURL
 $options = array(
@@ -27,7 +27,7 @@ function get_conversion_Dolar(){
     @$dom->loadHTML($response); // La '@' suprime los errores de HTML si el documento no está bien formado
 
     // Busca el elemento que contiene el tipo de cambio
-    $title = $dom->getElementsByTagName('output')->item(2);
+    $title = $dom->getElementsByTagName('span')->item(9);
     $titleText = $title->textContent;  
     return $titleText;
 }
