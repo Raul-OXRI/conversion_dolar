@@ -1,39 +1,70 @@
 <?php
 /**
-* Plugin Name: Conversion de Dólar a Quetzales
+ * Plugin Name: Conversión de Dólar a Quetzales
  * Plugin URI: https://github.com/Raul-OXRI/tipo_cambio 
  * Description: Este es un plugin que ayuda a visualizar a los clientes cómo está la conversión de dólar a quetzal.
  * Author: José Raúl Botzoc Mérida
  * Version: 0.0.5
  */
 
-require_once(dirname(__FILE__) . '/includes/api.php' );
+// Función para obtener el tipo de conversión de dólar
+function get_conversion_Dolar() {
+    // URL para obtener el tipo de cambio
+    $url = "https://wise.com/es/currency-converter/usd-to-gtq-rate";
 
+    // Opciones para la solicitud cURL
+    $options = array(
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_USERAGENT => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.95 Safari/537.36",
+    );
 
-function get_tipo_conversion_dolar() {
-    $tipo_texto = get_conversion_Dolar();
-    // 19x px de largo
-    //de ancho  1px
-    echo '
-    <div style="margin: 8px 0 0; padding: 20px; text-align: center; ">
-    <div style="align-items: center; justify-content: space-between; padding: 7px; width: 145px; background-color: #ffffff;border-radius: 25px;">
-      <h2 style="font-size: 10px; margin: 0; font-family: Montserrat, sans-serif; color: #052a60">Conversión USD a GTQ<br><span style="font-weight: bold; color: #052a60;font-size: 9px;">' . $tipo_texto . '</span></h2>
-    </div>
-  </div>
-  
+    // Inicia una solicitud cURL
+    $ch = curl_init();
+    curl_setopt_array($ch, $options);
 
-    ';
+    // Realiza la solicitud
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    // Analiza el HTML para obtener el tipo de cambio
+    $dom = new DOMDocument();
+    @$dom->loadHTML($response); // La '@' suprime los errores de HTML si el documento no está bien formado
+
+    // Busca el elemento que contiene el tipo de cambio
+    $title = $dom->getElementsByTagName('span')->item(24);
+    $titleText = $title->textContent;  
+    return $titleText;
 }
 
-// Registra el shortcode para mostrar el tipo de conversión de dólar
-add_shortcode('conversion_dolar', 'get_tipo_conversion_dolar');
+// Incluye el archivo con la función para obtener el tipo de cambio
+require_once(dirname(__FILE__) . '/includes/api.php');
+?>
 
-// Función que se ejecuta al activar el plugin (puedes agregar alguna funcionalidad aquí)
-register_activation_hook(__FILE__, 'activate_tipo_cambio_dolar');
+<div id="tipoConversion"></div>
 
-// Función que se ejecuta al desactivar el plugin (puedes agregar alguna funcionalidad aquí)
-register_deactivation_hook(__FILE__, 'deactivate_tipo_cambio_dolar');
+<script>
+// Función para obtener y mostrar el tipo de conversión de dólar
+function display_conversion_dolar() {
+    // Realiza una solicitud AJAX para obtener el tipo de cambio
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                // Actualiza el contenido del elemento con el nuevo valor
+                document.getElementById("tipoConversion").innerHTML = xhr.responseText;
+            }
+        }
+    };
+    xhr.open('GET', '<?php echo admin_url('admin-ajax.php'); ?>?action=get_conversion_dolar', true);
+    xhr.send();
+}
 
-// Estas funciones están vacías, puedes llenarlas con alguna lógica si es necesario
-function activate_tipo_cambio_dolar() {}
-function deactivate_tipo_cambio_dolar() {}
+// Ejecuta la función para mostrar el tipo de conversión de dólar al cargar la página
+window.onload = function() {
+    display_conversion_dolar();
+    // Actualiza automáticamente cada 60 segundos
+    setInterval(display_conversion_dolar, 60000);
+};
+</script>
